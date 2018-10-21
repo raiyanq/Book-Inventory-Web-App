@@ -11,7 +11,7 @@ var app = express();
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 db.serialize(function() {
-  //db.run("CREATE TABLE books (TITLE VARCHAR(255), BOOK VARCHAR(255), PAGE VARCHAR(255), KEY INT)");
+ // db.run("CREATE TABLE books (TITLE VARCHAR(255), BOOK VARCHAR(255), PAGE VARCHAR(255), KEY INT)");
 
 
 });
@@ -27,6 +27,7 @@ app.get('/',function(req,res){
 });
 
 app.post('/info', urlencodedParser, function(req,res){
+	let db = new sqlite3.Database('books.db');
 	var stmt = db.prepare("INSERT INTO books VALUES (?,?,?,?)");
 	stmt.run(req.body.title, req.body.book, req.body.page, req.body.key);
 	stmt.finalize();
