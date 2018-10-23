@@ -12,9 +12,10 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 db.serialize(function() {
   db.run("CREATE TABLE IF NOT EXISTS books (TITLE VARCHAR(255), BOOK VARCHAR(255), PAGE VARCHAR(255), KEY INT PRIMARY KEY)");
+  db.close();
 });
 
-//db.close();
+//
 
 // Uses the ejs templating engine
 app.set('view engine', 'ejs');
@@ -33,35 +34,47 @@ app.post('/info', urlencodedParser, function(req,res){
 		return console.error(err.message);
 	}});
     
-    res.render('info', {data: req.body});
+    res.render('insertinfo', {data: req.body});
 	db.close();
 });
 
 app.get('/update', urlencodedParser, function(req,res){
+
+    res.render('update', {qs: req.query});
+
+});
+
+app.post('/update', urlencodedParser, function(req,res){
 	let db = new sqlite3.Database('books.db');
 	let data = [req.body.title, req.body.book, req.body.page, req.body.key, req.body.key]
-	let sql = 'UPDATE books set TITLE = ?, BOOK = ?, PAGE = ?, KEY = ? WHERE KEY = ?';
-					
+	let sql = 'UPDATE books set TITLE = ?, BOOK = ?, PAGE = ?, KEY = ? WHERE KEY = ?';			
 	db.run(sql, data, function(err) {
 	if (err) {
 		return console.error(err.message);
 	}});
 	
 	console.log(`Row(s) updated: ${this.changes}`);
-    res.render('update', {qs: req.query});
+    res.render('updateinfo', {data: req.body});
 	db.close();
 });
 
 app.get('/delete', urlencodedParser, function(req,res){
+
+    res.render('delete', {qs: req.query});
+
+});
+
+app.post('/delete', urlencodedParser, function(req,res){
 	let db = new sqlite3.Database('books.db');
-	let data = [req.body.key]
-	let sql = 'DELETE FROM books WHERE key = ?';
-	db.run(sql, data, function(err) {
+	let dataDelete = [req.body.key]
+	let sqlDelete = 'DELETE FROM books WHERE key = ?';
+	db.run(sqlDelete, dataDelete, function(err) {
 	if (err) {
 		return console.error(err.message);
 	}});
+	
 	console.log(`Row(s) deleted ${this.changes}`);
-    res.render('delete', {qs: req.query});
+    res.render('deleteinfo', {data: req.body});
 	db.close();
 });
 
@@ -72,10 +85,9 @@ app.get('/books',function(req,res){
 	
 		db.all("SELECT TITLE, BOOK, PAGE, KEY FROM books", function(err, rows){
 		  for(var i=0; i<rows.length; i++){
-			  console.log(i + "TITLE: " + rows[i].TITLE + "BOOK: " + rows[i].BOOK + "PAGE: " + rows[i].PAGE + "KEY: " + rows[i].KEY);
-			  res.write('<p>' + rows[i].TITLE + ": " + rows[i].BOOK + ": " + rows[i].PAGE + ": " + rows[i].KEY + '</p>');
+			  res.write('<p>' + "TITLE: " + rows[i].TITLE + " BOOK: " + rows[i].BOOK + " PAGE: " + rows[i].PAGE + " KEY: " + rows[i].KEY + '</p>');
 		  }	  
-		//need this last line or it hangs because of something about res.write works as an asynchronosu function
+		//need this last line or it hangs because of something about res.write works as an asynchronous function
 		res.end() 
 		});
 		
