@@ -83,7 +83,7 @@ app.get('/books',function(req,res){
 	    let db = new sqlite3.Database('books.db');
         res.write('<h2>' +  'BOOKS' + '</h2>');
 	
-		db.all("SELECT TITLE, BOOK, PAGE, KEY FROM books", function(err, rows){
+		db.all("SELECT TITLE, BOOK, PAGE, KEY FROM books ORDER BY KEY ASC", function(err, rows){
 		  for(var i=0; i<rows.length; i++){
 			  res.write('<p>' + "TITLE: " + rows[i].TITLE + " BOOK: " + rows[i].BOOK + " PAGE: " + rows[i].PAGE + " KEY: " + rows[i].KEY + '</p>');
 		  }	  
