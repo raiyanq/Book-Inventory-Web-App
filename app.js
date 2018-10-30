@@ -29,10 +29,14 @@ app.post('/info', urlencodedParser, function(req,res){
 	let sql = 'INSERT INTO books VALUES (?,?,?,?)';
 	db.run(sql, data, function(err) {
 	if (err) {
-		return console.error(err.message);
-	}});
+		res.send(err.message);
+		return;
+	}
+	else{
+		res.render('insertinfo', {data: req.body});
+	}
+	});
     
-    res.render('insertinfo', {data: req.body});
 	db.close();
 });
 //when the button is clicked from index loads update form
@@ -48,11 +52,13 @@ app.post('/update', urlencodedParser, function(req,res){
 	let sql = 'UPDATE books set TITLE = ?, BOOK = ?, PAGE = ?, KEY = ? WHERE KEY = ?';			
 	db.run(sql, data, function(err) {
 	if (err) {
-		return console.error(err.message);
+		res.send(err.message);
+		return;
+	}
+	else{
+		res.render('updateinfo', {data: req.body});
 	}});
-	
-	console.log(`Row(s) updated: ${this.changes}`);
-    res.render('updateinfo', {data: req.body});
+    
 	db.close();
 });
 
@@ -68,11 +74,15 @@ app.post('/delete', urlencodedParser, function(req,res){
 	let sqlDelete = 'DELETE FROM books WHERE key = ?';
 	db.run(sqlDelete, dataDelete, function(err) {
 	if (err) {
-		return console.error(err.message);
+		res.send(err.message);
+		return;
+	}
+	else{
+		res.render('deleteinfo', {data: req.body});
 	}});
 	
-	console.log(`Row(s) deleted ${this.changes}`);
-    res.render('deleteinfo', {data: req.body});
+	//console.log(`Row(s) deleted ${this.changes}`);
+    
 	db.close();
 });
 
@@ -104,9 +114,11 @@ app.post('/search', urlencodedParser, function(req,res){
 	let db = new sqlite3.Database('books.db');
 	let data = [req.body.title, req.body.book, req.body.page, req.body.key]
 	let sql = 'SELECT TITLE, BOOK, PAGE, KEY FROM books WHERE TITLE = ? OR BOOK = ? OR PAGE = ? OR KEY = ? ORDER BY KEY ASC';	
-     
+    res.write('<h2>' +  'BOOKS' + '</h2>');
+	
 	db.all(sql, data, function(err, rows) {
 	for(var i=0; i<rows.length; i++){
+		
 			  res.write('<p>' + "TITLE: " + rows[i].TITLE + " BOOK: " + rows[i].BOOK + " PAGE: " + rows[i].PAGE + " KEY: " + rows[i].KEY + '</p>');
 		  }	
 	
