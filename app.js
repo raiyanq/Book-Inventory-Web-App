@@ -96,5 +96,27 @@ app.get('/books',function(req,res){
 		
 });
 
+app.get('/search', urlencodedParser, function(req,res){
+
+    res.render('search', {qs: req.query});
+
+});
+
+app.post('/search', urlencodedParser, function(req,res){
+	let db = new sqlite3.Database('books.db');
+	let data = [req.body.title, req.body.book, req.body.page, req.body.key]
+	let sql = 'SELECT TITLE, BOOK, PAGE, KEY FROM books WHERE TITLE = ? OR BOOK = ? OR PAGE = ? OR KEY = ? ORDER BY KEY ASC';	
+     
+	db.all(sql, data, function(err, rows) {
+	for(var i=0; i<rows.length; i++){
+			  res.write('<p>' + "TITLE: " + rows[i].TITLE + " BOOK: " + rows[i].BOOK + " PAGE: " + rows[i].PAGE + " KEY: " + rows[i].KEY + '</p>');
+		  }	
+	//res.write('<p>' + "TITLE: " + row.TITLE + " BOOK: " + row.BOOK + " PAGE: " + row.PAGE + " KEY: " + row.KEY + '</p>');
+	res.end() 
+	});
+		
+	db.close();
+});
+
 //Go to localhost:3000
 app.listen(3000);

@@ -4,7 +4,7 @@
         <link href="/assets/styles.css" rel="stylesheet" type="text/css">
      </head>
      <body>
-<form id="save-form" method="POST" action="/info">
+<form id="save-form" method="POST" action="/search">
         <label for="title">Title</label>
         <input type="text" name="title" value="<%= qs.name %>">
         <label for="book">Book</label>
@@ -16,21 +16,10 @@
         <input type="submit" value="submit" />
     </form>﻿
 	
-	<form action="/books">
-    <input type="submit" value="See all books" />
-	</form>
-	
-	<form action="/update">
-    <input type="submit" value="Update a book" />
+	<form action="/">
+    <input type="submit" value="Go Back" />
 	</form>
 
-	<form action="/delete">
-    <input type="submit" value="Delete a book" />
-	</form>
-	
-	<form action="/search">
-    <input type="submit" value="Search for a book" />
-	</form>
      </body>
 
 
