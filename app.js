@@ -80,9 +80,6 @@ app.post('/delete', urlencodedParser, function(req,res){
 	else{
 		res.render('deleteinfo', {data: req.body});
 	}});
-	
-	//console.log(`Row(s) deleted ${this.changes}`);
-    
 	db.close();
 });
 
@@ -117,8 +114,7 @@ app.post('/search', urlencodedParser, function(req,res){
     res.write('<h2>' +  'BOOKS' + '</h2>');
 	
 	db.all(sql, data, function(err, rows) {
-	for(var i=0; i<rows.length; i++){
-		
+	for(var i=0; i<rows.length; i++){		
 			  res.write('<p>' + "TITLE: " + rows[i].TITLE + " BOOK: " + rows[i].BOOK + " PAGE: " + rows[i].PAGE + " KEY: " + rows[i].KEY + '</p>');
 		  }	
 	
