@@ -15,8 +15,6 @@ db.serialize(function() {
   db.close();
 });
 
-//
-
 // Uses the ejs templating engine
 app.set('view engine', 'ejs');
 app.use('/assets',express.static('assets'));
@@ -37,13 +35,13 @@ app.post('/info', urlencodedParser, function(req,res){
     res.render('insertinfo', {data: req.body});
 	db.close();
 });
-
+//when the button is clicked from index loads update form
 app.get('/update', urlencodedParser, function(req,res){
 
     res.render('update', {qs: req.query});
 
 });
-
+//called when the update post request is sent, db is updated and the details of record updated are shown
 app.post('/update', urlencodedParser, function(req,res){
 	let db = new sqlite3.Database('books.db');
 	let data = [req.body.title, req.body.book, req.body.page, req.body.key, req.body.key]
@@ -111,7 +109,7 @@ app.post('/search', urlencodedParser, function(req,res){
 	for(var i=0; i<rows.length; i++){
 			  res.write('<p>' + "TITLE: " + rows[i].TITLE + " BOOK: " + rows[i].BOOK + " PAGE: " + rows[i].PAGE + " KEY: " + rows[i].KEY + '</p>');
 		  }	
-	//res.write('<p>' + "TITLE: " + row.TITLE + " BOOK: " + row.BOOK + " PAGE: " + row.PAGE + " KEY: " + row.KEY + '</p>');
+	
 	res.end() 
 	});
 		
