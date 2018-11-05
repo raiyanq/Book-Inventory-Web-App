@@ -86,7 +86,7 @@ app.post('/delete', urlencodedParser, function(req,res){
 
 app.get('/books',function(req,res){
 	    let db = new sqlite3.Database('books.db');
-        res.write('<h2>' +  'BOOKS' + '</h2>');
+        res.write('<h2>' +  'BOOK LIST' + '</h2>');
 	
 		db.all("SELECT TITLE, BOOK, PAGE, KEY FROM books ORDER BY KEY ASC", function(err, rows){
 		  for(var i=0; i<rows.length; i++){
@@ -111,7 +111,7 @@ app.post('/search', urlencodedParser, function(req,res){
 	let db = new sqlite3.Database('books.db');
 	let data = [req.body.title, req.body.book, req.body.page, req.body.key]
 	let sql = 'SELECT TITLE, BOOK, PAGE, KEY FROM books WHERE TITLE = ? OR BOOK = ? OR PAGE = ? OR KEY = ? ORDER BY KEY ASC';	
-    res.write('<h2>' +  'BOOKS' + '</h2>');
+    res.write('<h2>' +  'BOOK LIST' + '</h2>');
 	
 	db.all(sql, data, function(err, rows) {
 	for(var i=0; i<rows.length; i++){		
