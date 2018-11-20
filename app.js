@@ -11,7 +11,7 @@ var app = express();
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 db.serialize(function() {
-  db.run("CREATE TABLE IF NOT EXISTS books (TITLE VARCHAR(255), BOOK VARCHAR(255), PAGE VARCHAR(255), KEY INT PRIMARY KEY)");
+  db.run("CREATE TABLE IF NOT EXISTS books (TITLE VARCHAR(255), BOOK VARCHAR(255), PAGE INT, KEY INT PRIMARY KEY)");
   db.close();
 });
 
