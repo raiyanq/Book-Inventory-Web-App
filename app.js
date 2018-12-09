@@ -1,5 +1,3 @@
-
-
 var express = require('express');
 
 var sqlite3 = require('sqlite3').verbose();
@@ -10,6 +8,7 @@ var app = express();
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+//creates the table at the start of the application if it doesn't exist
 db.serialize(function() {
   db.run("CREATE TABLE IF NOT EXISTS books (TITLE VARCHAR(255), BOOK VARCHAR(255), PAGE INT, KEY INT PRIMARY KEY)");
   db.close();
@@ -61,13 +60,13 @@ app.post('/update', urlencodedParser, function(req,res){
     
 	db.close();
 });
-
+//when the user navigates to the delete page from the index 
 app.get('/delete', urlencodedParser, function(req,res){
 
     res.render('delete', {qs: req.query});
 
 });
-
+//when the user clicks submit on the delete page
 app.post('/delete', urlencodedParser, function(req,res){
 	let db = new sqlite3.Database('books.db');
 	let dataDelete = [req.body.key]
@@ -112,7 +111,7 @@ app.post('/search', urlencodedParser, function(req,res){
 	let data = [req.body.title, req.body.book, req.body.page, req.body.key]
 	let sql = 'SELECT TITLE, BOOK, PAGE, KEY FROM books WHERE TITLE = ? OR BOOK = ? OR PAGE = ? OR KEY = ? ORDER BY KEY ASC';	
     res.write('<h2>' +  'BOOK LIST' + '</h2>');
-	
+	//runs the search query and returns results of the search 
 	db.all(sql, data, function(err, rows) {
 	for(var i=0; i<rows.length; i++){		
 			  res.write('<p>' + "TITLE: " + rows[i].TITLE + " BOOK: " + rows[i].BOOK + " PAGE: " + rows[i].PAGE + " KEY: " + rows[i].KEY + '</p>');
